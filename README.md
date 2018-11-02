@@ -12,7 +12,7 @@ Tomcat 8
 Once build is completed please copy generated war from target directory and paste it into tomcat's webapps directory
 
 #endpoint
-https://host:port/autocomplete/services/autocomplete/suggest_cities?start=che&atmost=5
+GET https://host:port/autocomplete/services/autocomplete/suggest_cities?start=che&atmost=10
 
 query param: start (required),
              atmost (optional with default 10) should be valid integer value.
