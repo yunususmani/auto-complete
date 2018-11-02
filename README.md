@@ -14,7 +14,7 @@ Once build is completed please copy generated war from target directory and past
 #endpoint
 https://host:port/autocomplete/services/autocomplete/suggest_cities?start=che&atmost=5
 
-query param: start (required)
+query param: start (required),
              atmost (optional with default 10) should be valid integer value.
 
 
