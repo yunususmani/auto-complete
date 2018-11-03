@@ -15,7 +15,7 @@ Once build is completed please copy generated war from target directory and past
 GET https://host:port/autocomplete/services/autocomplete/suggest_cities?start=che&atmost=10
 
 query param: start (required),
-             atmost (optional with default 10) should be valid integer value.
+             atmost (optional with default 10) should be valid positive integer value.
 
 
 I have also deployed this service at some cloud machine. you can access this service using below url 
