@@ -50,7 +50,7 @@ public class AutocompleteService implements IAutocompleteService{
 			throw new ServiceException(Constants.ErrorConstants.INVALID_START);
 		}
 		
-		if(!ArgumentValidator.validInteger(maxCandidate)) {
+		if(!ArgumentValidator.validInteger(maxCandidate) || Integer.valueOf(maxCandidate) < 0) {
 			throw new ServiceException(Constants.ErrorConstants.INVALID_ATMOST);
 		}
 		
