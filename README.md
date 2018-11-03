@@ -18,3 +18,5 @@ query param: start (required),
              atmost (optional with default 10) should be valid integer value.
 
 
+I have also deployed this service at some cloud machine. you can access this service using below url 
+http://34.233.78.195:8080/autocomplete/services/autocomplete/suggest_cities?start=che&atmost=5
