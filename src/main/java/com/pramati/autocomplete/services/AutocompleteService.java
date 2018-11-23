@@ -1,7 +1,7 @@
 package com.pramati.autocomplete.services;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.pramati.autocomplete.cache.DataLoader;
+import com.pramati.autocomplete.cache.Node;
 import com.pramati.autocomplete.constants.Constants;
 import com.pramati.autocomplete.exception.ServiceException;
 import com.pramati.autocomplete.validator.ArgumentValidator;
@@ -18,7 +19,7 @@ public class AutocompleteService implements IAutocompleteService{
 
 	private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
 	
-	private static List<String> cities = DataLoader.getCities();
+	private static Node trie = DataLoader.getTrie();
 	
 	@Override
 	public List<String> getCities(String text, String maxCandidate) {
@@ -37,12 +38,33 @@ public class AutocompleteService implements IAutocompleteService{
 		final String exp = text.toUpperCase();
 		final Integer maxSize = Integer.valueOf(maxCandidate);
 		
-		List<String> results = cities.stream().filter(city -> city.startsWith(exp)).limit(maxSize)
-		                 .collect(Collectors.toList());
+		List<String> results = new ArrayList<>();
 		
+		// Iterate to the end of the prefix
+	    Node curr = trie;
+	    for (char c : text.toUpperCase().toCharArray()) {
+	        if (curr.children.containsKey(c)) {
+	            curr = curr.children.get(c);
+	        } else {
+	            return results;
+	        }
+	    }
+		
+	    findAllMatchWords(curr, results);
 		logger.info("total ["+results.size()+"] results found for input request");
 		
 		return results;
+	}
+
+	private void findAllMatchWords(Node curr, List<String> results) 
+	{
+		if(curr.isWord)
+			results.add(curr.prefix);
+		
+		for (Character c : curr.children.keySet()) {
+			findAllMatchWords(curr.children.get(c), results);
+	    }
+		
 	}
 
 	private void validateRequestParams(String text, String maxCandidate) {

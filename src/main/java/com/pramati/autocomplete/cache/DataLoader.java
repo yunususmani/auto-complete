@@ -6,7 +6,7 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -18,8 +18,9 @@ public class DataLoader {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
 
-	public static List<String> cities;
+	private static Node trie = new Node("");
 
+	private static Set<String> cities;
 	static {
 		BufferedReader bufferedReader = null;
 
@@ -34,8 +35,16 @@ public class DataLoader {
 			cities = bufferedReader.lines().skip(1).map((line) -> {
 				String[] lines = line.split(",");
 				return lines[7].toUpperCase();
-			}).distinct().collect(Collectors.toList());
+			}).distinct().collect(Collectors.toSet());
 			logger.info("data loaded successfully.");
+			
+			//build trie data nodes to make search faster
+			for(String city : cities) {
+				insert(city);
+			}
+			
+			cities = null;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("error in loading data from file: " + e.toString());
@@ -50,11 +59,20 @@ public class DataLoader {
 		}
 	}
 
-	public static List<String> getCities() {
-		return cities;
+	private static void insert(String city) 
+	{
+		Node curr = trie;
+		for(int i=0; i<city.length(); i++) {
+			if (!curr.children.containsKey(city.charAt(i))) {
+	            curr.children.put(city.charAt(i), new Node(city.substring(0, i + 1)));
+	        }
+	        curr = curr.children.get(city.charAt(i));
+	        if (i == city.length() - 1) curr.isWord = true;
+		}
 	}
 
-	public static void main(String[] args) {
-		DataLoader.cities.forEach(city -> System.out.println(city));
+	public static Node getTrie() {
+		return trie;
 	}
+
 }
