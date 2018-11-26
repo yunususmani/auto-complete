@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.mockito.internal.verification.AtMost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -50,19 +51,22 @@ public class AutocompleteService implements IAutocompleteService{
 	        }
 	    }
 		
-	    findAllMatchWords(curr, results);
+	    findAllMatchWords(curr, results, Integer.valueOf(maxCandidate));
 		logger.info("total ["+results.size()+"] results found for input request");
 		
 		return results;
 	}
 
-	private void findAllMatchWords(Node curr, List<String> results) 
+	private void findAllMatchWords(Node curr, List<String> results, int maxResult) 
 	{
+		if(results.size() >= maxResult)
+			return;
+		
 		if(curr.isWord)
 			results.add(curr.prefix);
 		
 		for (Character c : curr.children.keySet()) {
-			findAllMatchWords(curr.children.get(c), results);
+			findAllMatchWords(curr.children.get(c), results, maxResult);
 	    }
 		
 	}
