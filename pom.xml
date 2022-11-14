@@ -12,7 +12,7 @@
         <cxf.version>3.0.3</cxf.version>
         <httpclient.version>3.1</httpclient.version>
         <jax.ws.rs>2.0.1</jax.ws.rs>
-        <springmvc>4.1.4.RELEASE</springmvc>
+        <springmvc>4.2.7.RELEASE</springmvc>
         <junit.version>4.11</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<powermock.version>1.6.4</powermock.version>
